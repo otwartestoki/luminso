@@ -117,6 +117,7 @@ function SectionHeader({
 
 export default function Home() {
   const [sent, setSent] = useState(false);
+  const [company, setCompany] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -141,7 +142,6 @@ export default function Home() {
       },
       body: JSON.stringify({
         name,
-        company,
         email,
         message,
       }),
@@ -194,12 +194,6 @@ export default function Home() {
 
             <a
               href="#kontakt"
-              onClick={(event) => {
-                event.preventDefault();
-                document
-                  .getElementById("kontakt")
-                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }}
               className="rounded-xl border border-zinc-300 px-7 py-4 text-center text-sm font-bold transition hover:bg-zinc-100 dark:border-white/20 dark:hover:bg-white/10"
             >
               Kontakt
@@ -329,7 +323,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="kontakt" className="relative z-10 mx-auto max-w-5xl scroll-mt-28 px-6 pb-20 pt-16">
+      <section id="kontakt" className="relative z-10 mx-auto max-w-5xl px-6 pb-20 pt-16">
         <SectionHeader
           eyebrow="Kontakt"
           title="Porozmawiajmy o Twojej stronie"
@@ -347,18 +341,17 @@ export default function Home() {
               />
 
               <input
-                required
-                type="email"
-                name="email"
-                placeholder="E-mail"
+                name="company"
+                placeholder="Nazwa firmy"
                 className="rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-500 focus:border-violet-500 dark:border-white/10 dark:bg-black/20 dark:text-white"
               />
 
               <input
                 required
-                name="company"
-                placeholder="Nazwa firmy"
-                className="rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-500 focus:border-violet-500 dark:border-white/10 dark:bg-black/20 dark:text-white md:col-span-2"
+                type="email"
+                name="email"
+                placeholder="E-mail"
+                className="rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-500 focus:border-violet-500 dark:border-white/10 dark:bg-black/20 dark:text-white"
               />
             </div>
 
@@ -379,10 +372,13 @@ export default function Home() {
 
             {sent && (
               <p className="text-sm text-violet-500 dark:text-violet-300">
-                Wiadomość została wysłana.
+                Otwieram program pocztowy z gotową wiadomością.
               </p>
             )}
           </form>
+        </div>
+        <div className="mt-10 text-center text-xs text-zinc-400 dark:text-zinc-600">
+          Jacek Smętkowski | luminso | kontakt@luminso.pl
         </div>
       </section>
     </main>
