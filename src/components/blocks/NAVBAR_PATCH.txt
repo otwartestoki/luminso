@@ -1,0 +1,14 @@
+Zmień:
+href="/blog"
+
+na:
+
+href="/news"
+
+oraz:
+
+>Blog<
+
+na:
+
+>News<

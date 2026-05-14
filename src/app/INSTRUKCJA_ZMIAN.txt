@@ -1,0 +1,29 @@
+const steps = [
+  {
+    title: "Rozmowa",
+    text: "Poznaję Twoją firmę, potrzeby i styl, który najlepiej pasuje do branży.",
+  },
+  {
+    title: "Projekt strony",
+    text: "Przygotowuję nowoczesny projekt dopasowany do Twojej firmy i klientów.",
+  },
+  {
+    title: "Umowa wstępna",
+    text: "Ustalamy zakres współpracy, termin realizacji oraz podstawowe warunki.",
+  },
+  {
+    title: "Uruchomienie",
+    text: "Publikuję stronę, konfiguruję domenę i sprawdzam poprawność działania.",
+  },
+  {
+    title: "Finalizacja",
+    text: "Wprowadzamy ostatnie poprawki i przekazuję gotową stronę do działania.",
+  },
+];
+
+Zmień również:
+<div className="grid gap-8 md:grid-cols-3">
+
+na:
+
+<div className="grid gap-8 md:grid-cols-2 xl:grid-cols-5">

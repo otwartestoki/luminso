@@ -1,238 +1,144 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-import { ChevronRight, Github } from "lucide-react";
+import { ChevronDown, ChevronRight, Menu, X } from "lucide-react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 
-const ITEMS = [
-  {
-    label: "Features",
-    href: "#features",
-    dropdownItems: [
-      {
-        title: "Modern product teams",
-        href: "/#feature-modern-teams",
-        description:
-          "Mainline is built on the habits that make the best product teams successful",
-      },
-      {
-        title: "Resource Allocation",
-        href: "/#resource-allocation",
-        description: "Mainline your resource allocation and execution",
-      },
-    ],
-  },
-  { label: "About Us", href: "/about" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Contact", href: "/contact" },
+const LANDING_LINKS = [
+  { label: "Oferta", href: "/#oferta" },
+  { label: "Realizacje", href: "/#realizacje" },
+  { label: "Proces", href: "/#proces" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const pathname = usePathname();
+  const [isLandingOpen, setIsLandingOpen] = useState(false);
 
   return (
     <section
       className={cn(
-        "bg-background/70 absolute left-1/2 z-50 w-[min(90%,700px)] -translate-x-1/2 rounded-4xl border backdrop-blur-md transition-all duration-300",
-        "top-5 lg:top-12",
+        "absolute left-1/2 top-6 z-50 w-[min(94%,980px)] -translate-x-1/2 rounded-4xl border border-zinc-200 bg-white/85 text-zinc-950 shadow-2xl shadow-black/10 backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#05070d]/80 dark:text-white lg:top-8",
       )}
     >
-      <div className="flex items-center justify-between px-6 py-3">
+      <div className="flex items-center justify-between gap-4 px-5 py-3">
         <Link href="/" className="flex shrink-0 items-center gap-2">
-          <Image
-            src="/logo.svg"
-            alt="logo"
-            width={94}
-            height={18}
-            className="dark:invert"
-          />
+          <span className="text-2xl font-black tracking-tight">
+            lumin<span className="text-violet-500">so.</span>
+          </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <NavigationMenu className="max-lg:hidden">
-          <NavigationMenuList>
-            {ITEMS.map((link) =>
-              link.dropdownItems ? (
-                <NavigationMenuItem key={link.label} className="">
-                  <NavigationMenuTrigger className="data-[state=open]:bg-accent/50 bg-transparent! px-1.5">
-                    {link.label}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="w-[400px] space-y-2 p-4">
-                      {link.dropdownItems.map((item) => (
-                        <li key={item.title}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              href={item.href}
-                              className="group hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground flex items-center gap-4 rounded-md p-3 leading-none no-underline outline-hidden transition-colors select-none"
-                            >
-                              <div className="space-y-1.5 transition-transform duration-300 group-hover:translate-x-1">
-                                <div className="text-sm leading-none font-medium">
-                                  {item.title}
-                                </div>
-                                <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-                                  {item.description}
-                                </p>
-                              </div>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              ) : (
-                <NavigationMenuItem key={link.label} className="">
+        <nav className="hidden flex-1 items-center justify-center gap-6 lg:flex">
+          <div
+            className="relative"
+            onMouseEnter={() => setIsLandingOpen(true)}
+            onMouseLeave={() => setIsLandingOpen(false)}
+          >
+            <button
+              type="button"
+              onClick={() => setIsLandingOpen((value) => !value)}
+              className="flex items-center gap-1 text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300"
+            >
+              Strona główna
+              <ChevronDown
+                className={cn(
+                  "size-4 transition-transform",
+                  isLandingOpen && "rotate-180",
+                )}
+              />
+            </button>
+
+            <div
+              className={cn(
+                "absolute left-1/2 top-full w-60 -translate-x-1/2 pt-4 transition-all duration-150",
+                isLandingOpen
+                  ? "visible translate-y-0 opacity-100"
+                  : "invisible -translate-y-2 opacity-0",
+              )}
+            >
+              <div className="rounded-2xl border border-zinc-200 bg-white p-2 shadow-xl shadow-black/10 dark:border-white/10 dark:bg-[#05070d]">
+                {LANDING_LINKS.map((item) => (
                   <Link
-                    href={link.href}
-                    className={cn(
-                      "relative bg-transparent px-1.5 text-sm font-medium transition-opacity hover:opacity-75",
-                      pathname === link.href && "text-muted-foreground",
-                    )}
+                    key={item.label}
+                    href={item.href}
+                    className="block rounded-xl px-4 py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 hover:text-violet-600 dark:text-white/80 dark:hover:bg-white/10 dark:hover:text-violet-300"
                   >
-                    {link.label}
+                    {item.label}
                   </Link>
-                </NavigationMenuItem>
-              ),
-            )}
-          </NavigationMenuList>
-        </NavigationMenu>
-
-        {/* Auth Buttons */}
-        <div className="flex items-center gap-2.5">
-          <ThemeToggle />
-          <Link href="/login" className="max-lg:hidden">
-            <Button variant="outline">
-              <span className="relative z-10">Login</span>
-            </Button>
-          </Link>
-          <a
-            href="https://github.com/shadcnblocks/mainline-nextjs-template"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Github className="size-4" />
-            <span className="sr-only">GitHub</span>
-          </a>
-
-          {/* Hamburger Menu Button (Mobile Only) */}
-          <button
-            className="text-muted-foreground relative flex size-8 lg:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <span className="sr-only">Open main menu</span>
-            <div className="absolute top-1/2 left-1/2 block w-[18px] -translate-x-1/2 -translate-y-1/2">
-              <span
-                aria-hidden="true"
-                className={`absolute block h-0.5 w-full rounded-full bg-current transition duration-500 ease-in-out ${isMenuOpen ? "rotate-45" : "-translate-y-1.5"}`}
-              ></span>
-              <span
-                aria-hidden="true"
-                className={`absolute block h-0.5 w-full rounded-full bg-current transition duration-500 ease-in-out ${isMenuOpen ? "opacity-0" : ""}`}
-              ></span>
-              <span
-                aria-hidden="true"
-                className={`absolute block h-0.5 w-full rounded-full bg-current transition duration-500 ease-in-out ${isMenuOpen ? "-rotate-45" : "translate-y-1.5"}`}
-              ></span>
+                ))}
+              </div>
             </div>
+          </div>
+
+          <Link href="/o-nas" className="text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300">
+            O nas
+          </Link>
+          <Link href="/cennik" className="text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300">
+            Cennik
+          </Link>
+          <Link href="/news" className="text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300">
+            News
+          </Link>
+          <Link href="/dlaczego-strona" className="text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300">
+            Dlaczego strona?
+          </Link>
+        </nav>
+
+        <div className="flex shrink-0 items-center gap-2.5">
+          <ThemeToggle />
+          <Link href="/#kontakt" className="hidden rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-violet-500 lg:inline-flex">
+            Kontakt
+          </Link>
+          <button
+            className="flex size-9 items-center justify-center rounded-xl border border-zinc-200 text-zinc-950 dark:border-white/10 dark:text-white lg:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Otwórz menu"
+          >
+            {isMenuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
           </button>
         </div>
       </div>
 
-      {/*  Mobile Menu Navigation */}
       <div
         className={cn(
-          "bg-background fixed inset-x-0 top-[calc(100%+1rem)] flex flex-col rounded-2xl border p-6 transition-all duration-300 ease-in-out lg:hidden",
+          "fixed inset-x-0 top-[calc(100%+1rem)] flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 text-zinc-950 shadow-xl transition-all duration-300 ease-in-out dark:border-white/10 dark:bg-[#05070d] dark:text-white lg:hidden",
           isMenuOpen
             ? "visible translate-y-0 opacity-100"
             : "invisible -translate-y-4 opacity-0",
         )}
       >
-        <nav className="divide-border flex flex-1 flex-col divide-y">
-          {ITEMS.map((link) =>
-            link.dropdownItems ? (
-              <div key={link.label} className="py-4 first:pt-0 last:pb-0">
-                <button
-                  onClick={() =>
-                    setOpenDropdown(
-                      openDropdown === link.label ? null : link.label,
-                    )
-                  }
-                  className="text-primary flex w-full items-center justify-between text-base font-medium"
-                >
-                  {link.label}
-                  <ChevronRight
-                    className={cn(
-                      "size-4 transition-transform duration-200",
-                      openDropdown === link.label ? "rotate-90" : "",
-                    )}
-                  />
-                </button>
-                <div
-                  className={cn(
-                    "overflow-hidden transition-all duration-300",
-                    openDropdown === link.label
-                      ? "mt-4 max-h-[1000px] opacity-100"
-                      : "max-h-0 opacity-0",
-                  )}
-                >
-                  <div className="bg-muted/50 space-y-3 rounded-lg p-4">
-                    {link.dropdownItems.map((item) => (
-                      <Link
-                        key={item.title}
-                        href={item.href}
-                        className="group hover:bg-accent block rounded-md p-2 transition-colors"
-                        onClick={() => {
-                          setIsMenuOpen(false);
-                          setOpenDropdown(null);
-                        }}
-                      >
-                        <div className="transition-transform duration-200 group-hover:translate-x-1">
-                          <div className="text-primary font-medium">
-                            {item.title}
-                          </div>
-
-                          <p className="text-muted-foreground mt-1 text-sm">
-                            {item.description}
-                          </p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={cn(
-                  "text-primary hover:text-primary/80 py-4 text-base font-medium transition-colors first:pt-0 last:pb-0",
-                  pathname === link.href && "text-muted-foreground",
-                )}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.label}
+        <nav className="flex flex-col divide-y divide-zinc-200 dark:divide-white/10">
+          <div className="py-3">
+            <div className="mb-2 px-1 text-xs font-bold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
+              Strona główna
+            </div>
+            {LANDING_LINKS.map((item) => (
+              <Link key={item.label} href={item.href} className="flex items-center justify-between rounded-xl px-1 py-3 text-base font-semibold" onClick={() => setIsMenuOpen(false)}>
+                {item.label}
+                <ChevronRight className="size-4 text-violet-500" />
               </Link>
-            ),
-          )}
+            ))}
+          </div>
+
+          {[
+            { label: "O nas", href: "/o-nas" },
+            { label: "Cennik", href: "/cennik" },
+            { label: "News", href: "/news" },
+            { label: "Dlaczego strona?", href: "/dlaczego-strona" },
+          ].map((item) => (
+            <Link key={item.href} href={item.href} className="flex items-center justify-between py-4 text-base font-semibold" onClick={() => setIsMenuOpen(false)}>
+              {item.label}
+              <ChevronRight className="size-4 text-violet-500" />
+            </Link>
+          ))}
+
+          <Link href="/#kontakt" className="mt-4 rounded-xl bg-violet-600 px-5 py-3 text-center text-sm font-bold text-white" onClick={() => setIsMenuOpen(false)}>
+            Kontakt
+          </Link>
         </nav>
       </div>
     </section>
