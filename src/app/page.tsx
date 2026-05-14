@@ -31,12 +31,12 @@ const steps = [
     text: "Poznaję Twoją firmę, potrzeby i styl, który najlepiej pasuje do branży.",
   },
   {
-    title: "Projekt strony",
-    text: "Przygotowuję nowoczesny projekt dopasowany do Twojej firmy i klientów.",
-  },
-  {
     title: "Umowa wstępna",
     text: "Ustalamy zakres współpracy, termin realizacji oraz podstawowe warunki.",
+  },
+  {
+    title: "Projekt strony",
+    text: "Przygotowuję nowoczesny projekt dopasowany do Twojej firmy i klientów.",
   },
   {
     title: "Uruchomienie",
