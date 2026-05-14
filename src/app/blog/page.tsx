@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 const posts = [
   {
     title: "Dlaczego własna strona pomaga zdobywać klientów z Google?",
