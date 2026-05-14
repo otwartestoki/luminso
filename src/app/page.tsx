@@ -134,7 +134,19 @@ export default function Home() {
       `Imię: ${name}\nE-mail: ${email}\n\n${message}`,
     );
 
-    window.location.href = `mailto:kontakt@luminso.pl?subject=${subject}&body=${body}`;
+    await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        message,
+      }),
+    });
+
+    alert("Wiadomość została wysłana");
     setSent(true);
   }
 
