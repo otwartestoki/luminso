@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+
 import type { Metadata } from "next";
 
 import { Navbar } from "@/components/blocks/navbar";
