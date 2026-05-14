@@ -117,7 +117,6 @@ function SectionHeader({
 
 export default function Home() {
   const [sent, setSent] = useState(false);
-  const [company, setCompany] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -127,12 +126,13 @@ export default function Home() {
     const data = new FormData(form);
 
     const name = String(data.get("name") || "");
+    const company = String(data.get("company") || "");
     const email = String(data.get("email") || "");
     const message = String(data.get("message") || "");
 
     const subject = encodeURIComponent("Zapytanie o stronę internetową");
     const body = encodeURIComponent(
-      `Imię: ${name}\nE-mail: ${email}\n\n${message}`,
+      `Imię: ${name}\nFirma: ${company || "-"}\nE-mail: ${email}\n\n${message}`,
     );
 
     await fetch("/api/contact", {
@@ -142,6 +142,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         name,
+        company,
         email,
         message,
       }),
@@ -377,9 +378,15 @@ export default function Home() {
             )}
           </form>
         </div>
-        <div className="mt-10 text-center text-xs text-zinc-400 dark:text-zinc-600">
-          Jacek Smętkowski | luminso | kontakt@luminso.pl
-        </div>
+        <footer className="mt-10 text-center text-xs text-zinc-400 dark:text-zinc-600">
+          <div>Jacek Smętkowski | luminso | kontakt@luminso.pl</div>
+          <a
+            href="/regulamin"
+            className="mt-2 inline-block transition hover:text-zinc-600 dark:hover:text-zinc-400"
+          >
+            Regulamin
+          </a>
+        </footer>
       </section>
     </main>
   );
