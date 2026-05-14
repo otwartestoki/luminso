@@ -119,7 +119,7 @@ export default function Home() {
   const [sent, setSent] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const form = event.currentTarget;
