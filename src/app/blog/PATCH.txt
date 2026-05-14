@@ -1,0 +1,10 @@
+W src/app/blog/page.tsx
+
+zamień każde:
+
+<img
+
+na:
+
+{/* eslint-disable-next-line @next/next/no-img-element */}
+<img
