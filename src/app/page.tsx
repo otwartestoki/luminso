@@ -380,12 +380,21 @@ export default function Home() {
         </div>
         <footer className="mt-10 text-center text-xs text-zinc-400 dark:text-zinc-600">
           <div>Jacek Smętkowski | luminso | kontakt@luminso.pl</div>
-          <a
-            href="/regulamin"
-            className="mt-2 inline-block transition hover:text-zinc-600 dark:hover:text-zinc-400"
-          >
-            Regulamin
-          </a>
+          <div className="mt-2 flex items-center justify-center gap-4">
+            <a
+              href="/regulamin"
+              className="transition hover:text-zinc-600 dark:hover:text-zinc-400"
+            >
+              Regulamin
+            </a>
+
+            <a
+              href="/polityka-prywatnosci"
+              className="transition hover:text-zinc-600 dark:hover:text-zinc-400"
+            >
+              Polityka prywatności
+            </a>
+          </div>
         </footer>
       </section>
     </main>
