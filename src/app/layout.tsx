@@ -29,6 +29,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.luminso.pl"),
   title: {
     default: "Luminso - nowoczesne strony dla lokalnych firm",
     template: "%s | Luminso",
@@ -64,7 +65,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" suppressHydrationWarning>
+    <html lang="pl" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={`${dmSans.variable} ${inter.variable} bg-[#05070d] antialiased`}>
         <ThemeProvider
           attribute="class"

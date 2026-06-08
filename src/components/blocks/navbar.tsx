@@ -1,23 +1,83 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import Link from "next/link";
-import { useState } from "react";
 
 import { ChevronDown, ChevronRight, Menu, X } from "lucide-react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
-const LANDING_LINKS = [
-  { label: "Oferta", href: "/#oferta" },
-  { label: "Realizacje", href: "/#realizacje" },
-  { label: "Proces", href: "/#proces" },
-  { label: "FAQ", href: "/#faq" },
-];
+type Locale = "pl" | "en";
+
+const navText = {
+  pl: {
+    home: "Strona główna",
+    about: "O nas",
+    pricing: "Cennik",
+    news: "News",
+    why: "Dlaczego strona?",
+    contact: "Kontakt",
+    openMenu: "Otwórz menu",
+    landingLinks: [
+      { label: "Oferta", href: "/#oferta" },
+      { label: "Realizacje", href: "/#realizacje" },
+      { label: "Proces", href: "/#proces" },
+      { label: "FAQ", href: "/#faq" },
+    ],
+  },
+  en: {
+    home: "Home",
+    about: "About",
+    pricing: "Pricing",
+    news: "News",
+    why: "Why a website?",
+    contact: "Contact",
+    openMenu: "Open menu",
+    landingLinks: [
+      { label: "Services", href: "/#oferta" },
+      { label: "Projects", href: "/#realizacje" },
+      { label: "Process", href: "/#proces" },
+      { label: "FAQ", href: "/#faq" },
+    ],
+  },
+} satisfies Record<Locale, {
+  home: string;
+  about: string;
+  pricing: string;
+  news: string;
+  why: string;
+  contact: string;
+  openMenu: string;
+  landingLinks: { label: string; href: string }[];
+}>;
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLandingOpen, setIsLandingOpen] = useState(false);
+  const [locale, setLocale] = useState<Locale>("pl");
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("locale");
+    if (stored === "pl" || stored === "en") {
+      setLocale(stored);
+    }
+  }, []);
+
+  function changeLanguage(nextLocale: Locale) {
+    setLocale(nextLocale);
+    window.localStorage.setItem("locale", nextLocale);
+    window.dispatchEvent(new Event("localechange"));
+  }
+
+  const t = navText[locale];
+  const mainLinks = [
+    { label: t.about, href: "/o-nas" },
+    { label: t.pricing, href: locale === "en" ? "/pricing-en" : "/cennik" },
+    { label: t.news, href: "/news" },
+    { label: t.why, href: "/dlaczego-strona" },
+  ];
 
   return (
     <section
@@ -43,7 +103,7 @@ export const Navbar = () => {
               onClick={() => setIsLandingOpen((value) => !value)}
               className="flex items-center gap-1 text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300"
             >
-              Strona główna
+              {t.home}
               <ChevronDown
                 className={cn(
                   "size-4 transition-transform",
@@ -61,7 +121,7 @@ export const Navbar = () => {
               )}
             >
               <div className="rounded-2xl border border-zinc-200 bg-white p-2 shadow-xl shadow-black/10 dark:border-white/10 dark:bg-[#05070d]">
-                {LANDING_LINKS.map((item) => (
+                {t.landingLinks.map((item) => (
                   <Link
                     key={item.label}
                     href={item.href}
@@ -74,29 +134,54 @@ export const Navbar = () => {
             </div>
           </div>
 
-          <Link href="/o-nas" className="text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300">
-            O nas
-          </Link>
-          <Link href="/cennik" className="text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300">
-            Cennik
-          </Link>
-          <Link href="/news" className="text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300">
-            News
-          </Link>
-          <Link href="/dlaczego-strona" className="text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300">
-            Dlaczego strona?
-          </Link>
+          {mainLinks.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm font-semibold text-zinc-700 transition hover:text-violet-600 dark:text-white/80 dark:hover:text-violet-300"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex shrink-0 items-center gap-2.5">
+          <div className="flex items-center overflow-hidden rounded-xl border border-zinc-200 bg-white/70 text-xs font-black dark:border-white/10 dark:bg-white/5">
+            <button
+              type="button"
+              onClick={() => changeLanguage("pl")}
+              className={cn(
+                "px-2.5 py-2 transition",
+                locale === "pl"
+                  ? "bg-violet-600 text-white"
+                  : "text-zinc-700 hover:bg-zinc-100 dark:text-white/80 dark:hover:bg-white/10",
+              )}
+              aria-label="Polska wersja językowa"
+            >
+              PL
+            </button>
+            <button
+              type="button"
+              onClick={() => changeLanguage("en")}
+              className={cn(
+                "px-2.5 py-2 transition",
+                locale === "en"
+                  ? "bg-violet-600 text-white"
+                  : "text-zinc-700 hover:bg-zinc-100 dark:text-white/80 dark:hover:bg-white/10",
+              )}
+              aria-label="English language version"
+            >
+              EN
+            </button>
+          </div>
           <ThemeToggle />
           <Link href="/#kontakt" className="hidden rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-violet-500 lg:inline-flex">
-            Kontakt
+            {t.contact}
           </Link>
           <button
             className="flex size-9 items-center justify-center rounded-xl border border-zinc-200 text-zinc-950 dark:border-white/10 dark:text-white lg:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Otwórz menu"
+            aria-label={t.openMenu}
           >
             {isMenuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
           </button>
@@ -114,9 +199,9 @@ export const Navbar = () => {
         <nav className="flex flex-col divide-y divide-zinc-200 dark:divide-white/10">
           <div className="py-3">
             <div className="mb-2 px-1 text-xs font-bold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
-              Strona główna
+              {t.home}
             </div>
-            {LANDING_LINKS.map((item) => (
+            {t.landingLinks.map((item) => (
               <Link key={item.label} href={item.href} className="flex items-center justify-between rounded-xl px-1 py-3 text-base font-semibold" onClick={() => setIsMenuOpen(false)}>
                 {item.label}
                 <ChevronRight className="size-4 text-violet-500" />
@@ -124,12 +209,7 @@ export const Navbar = () => {
             ))}
           </div>
 
-          {[
-            { label: "O nas", href: "/o-nas" },
-            { label: "Cennik", href: "/cennik" },
-            { label: "News", href: "/news" },
-            { label: "Dlaczego strona?", href: "/dlaczego-strona" },
-          ].map((item) => (
+          {mainLinks.map((item) => (
             <Link key={item.href} href={item.href} className="flex items-center justify-between py-4 text-base font-semibold" onClick={() => setIsMenuOpen(false)}>
               {item.label}
               <ChevronRight className="size-4 text-violet-500" />
@@ -137,7 +217,7 @@ export const Navbar = () => {
           ))}
 
           <Link href="/#kontakt" className="mt-4 rounded-xl bg-violet-600 px-5 py-3 text-center text-sm font-bold text-white" onClick={() => setIsMenuOpen(false)}>
-            Kontakt
+            {t.contact}
           </Link>
         </nav>
       </div>

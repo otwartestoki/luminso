@@ -1,52 +1,199 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
-const services = [
-  {
-    title: "Strona internetowa",
-    text: "Nowoczesna i dopasowana do Twojej firmy.",
-    icon: "◎",
-  },
-  {
-    title: "Domena",
-    text: "Pomoc w zakupie i konfiguracji domeny.",
-    icon: "▣",
-  },
-  {
-    title: "Uruchomienie",
-    text: "Publikacja strony i konfiguracja techniczna.",
-    icon: "✦",
-  },
-  {
-    title: "Opieka",
-    text: "Aktualizacje i wsparcie po uruchomieniu.",
-    icon: "◇",
-  },
-];
+type Locale = "pl" | "en";
 
-const steps = [
-  {
-    title: "Rozmowa",
-    text: "Poznaję Twoją firmę, potrzeby i styl, który najlepiej pasuje do branży.",
+const content = {
+  pl: {
+    heroTitle: "Nowoczesne strony dla lokalnych firm",
+    heroText: "Projekt, domena, uruchomienie i opieka w jednym miejscu.",
+    viewProjects: "Zobacz realizacje",
+    contact: "Kontakt",
+    offerEyebrow: "Oferta",
+    offerTitle: "Co obejmuje współpraca?",
+    offerDescription:
+      "Prosta, nowoczesna strona oraz obsługa techniczna od domeny po uruchomienie.",
+    projectsEyebrow: "Realizacje",
+    projectsTitle: "Przykładowe strony dla lokalnych firm",
+    projectsDescription:
+      "Różne branże, różny klimat i jeden cel: profesjonalny wygląd oraz łatwy kontakt z klientem.",
+    processEyebrow: "Proces",
+    processTitle: "Jak wygląda współpraca?",
+    processDescription: "Krótko, konkretnie i bez zbędnego technicznego zamieszania.",
+    faqTitle: "Pytania i odpowiedzi",
+    faqDescription: "Najczęstsze pytania przed startem współpracy.",
+    contactTitle: "Porozmawiajmy o Twojej stronie",
+    contactDescription:
+      "Napisz kilka słów o swojej firmie i stronie, której potrzebujesz.",
+    closePreview: "Zamknij podgląd",
+    previewAlt: "Powiększony podgląd realizacji",
+    sentAlert: "Wiadomość została wysłana",
+    subject: "Zapytanie o stronę internetową",
+    formName: "Imię",
+    formCompany: "Firma",
+    formEmail: "E-mail",
+    formMessage: "Wiadomość",
+    formButton: "Wyślij wiadomość",
+    services: [
+      {
+        title: "Strona internetowa",
+        text: "Nowoczesna i dopasowana do Twojej firmy.",
+        icon: "◎",
+      },
+      {
+        title: "Domena",
+        text: "Pomoc w zakupie i konfiguracji domeny.",
+        icon: "▣",
+      },
+      {
+        title: "Uruchomienie",
+        text: "Publikacja strony i konfiguracja techniczna.",
+        icon: "✦",
+      },
+      {
+        title: "Opieka",
+        text: "Aktualizacje i wsparcie po uruchomieniu.",
+        icon: "◇",
+      },
+    ],
+    steps: [
+      {
+        title: "Rozmowa",
+        text: "Poznaję Twoją firmę, potrzeby i styl, który najlepiej pasuje do branży.",
+      },
+      {
+        title: "Umowa wstępna",
+        text: "Ustalamy zakres współpracy, termin realizacji oraz podstawowe warunki.",
+      },
+      {
+        title: "Projekt strony",
+        text: "Przygotowuję nowoczesny projekt dopasowany do Twojej firmy i klientów.",
+      },
+      {
+        title: "Uruchomienie",
+        text: "Publikuję stronę, konfiguruję domenę i sprawdzam poprawność działania.",
+      },
+      {
+        title: "Finalizacja",
+        text: "Wprowadzamy ostatnie poprawki i przekazuję gotową stronę do działania.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Czy muszę znać się na domenach i hostingu?",
+        answer:
+          "Nie. Zajmuję się konfiguracją techniczną, domeną i uruchomieniem strony.",
+      },
+      {
+        question: "Czy mogę dodać Booksy, Uber Eats albo WhatsApp?",
+        answer: "Tak. Strona może prowadzić klientów dokładnie tam, gdzie chcesz.",
+      },
+      {
+        question: "Czy mogę później zmienić zdjęcia lub cennik?",
+        answer: "Tak. W ramach opieki mogę aktualizować treści i zdjęcia.",
+      },
+      {
+        question: "Ile trwa przygotowanie strony?",
+        answer: "Przy prostym zakresie zwykle od kilku dni roboczych.",
+      },
+    ],
   },
-  {
-    title: "Umowa wstępna",
-    text: "Ustalamy zakres współpracy, termin realizacji oraz podstawowe warunki.",
+  en: {
+    heroTitle: "Modern websites for local businesses",
+    heroText: "Design, domain, launch and support in one place.",
+    viewProjects: "View projects",
+    contact: "Contact",
+    offerEyebrow: "Services",
+    offerTitle: "What is included?",
+    offerDescription:
+      "A clean, modern website and technical setup from domain to launch.",
+    projectsEyebrow: "Projects",
+    projectsTitle: "Example websites for local businesses",
+    projectsDescription:
+      "Different industries, different styles and one goal: a professional look with easy customer contact.",
+    processEyebrow: "Process",
+    processTitle: "How does it work?",
+    processDescription: "Simple, clear and without unnecessary technical confusion.",
+    faqTitle: "Questions and answers",
+    faqDescription: "Common questions before starting a project.",
+    contactTitle: "Let’s talk about your website",
+    contactDescription:
+      "Send a few words about your business and the website you need.",
+    closePreview: "Close preview",
+    previewAlt: "Enlarged project preview",
+    sentAlert: "Your message has been sent",
+    subject: "Website project inquiry",
+    formName: "Name",
+    formCompany: "Company",
+    formEmail: "Email",
+    formMessage: "Message",
+    formButton: "Send message",
+    services: [
+      {
+        title: "Website",
+        text: "Modern and tailored to your business.",
+        icon: "◎",
+      },
+      {
+        title: "Domain",
+        text: "Help with domain purchase and setup.",
+        icon: "▣",
+      },
+      {
+        title: "Launch",
+        text: "Website deployment and technical configuration.",
+        icon: "✦",
+      },
+      {
+        title: "Support",
+        text: "Updates and support after launch.",
+        icon: "◇",
+      },
+    ],
+    steps: [
+      {
+        title: "Discovery",
+        text: "I learn about your business, needs and the style that fits your industry.",
+      },
+      {
+        title: "Initial agreement",
+        text: "We define the scope, delivery time and basic cooperation terms.",
+      },
+      {
+        title: "Website design",
+        text: "I prepare a modern design tailored to your company and customers.",
+      },
+      {
+        title: "Launch",
+        text: "I publish the website, configure the domain and check that everything works correctly.",
+      },
+      {
+        title: "Finalization",
+        text: "We make final adjustments and hand over a ready-to-use website.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Do I need to understand domains and hosting?",
+        answer:
+          "No. I handle the technical setup, domain configuration and launch.",
+      },
+      {
+        question: "Can I add Booksy, Uber Eats or WhatsApp?",
+        answer: "Yes. The website can lead customers exactly where you want.",
+      },
+      {
+        question: "Can I change photos or prices later?",
+        answer: "Yes. I can update content and photos as part of ongoing support.",
+      },
+      {
+        question: "How long does a website take?",
+        answer: "For a simple scope, usually a few business days.",
+      },
+    ],
   },
-  {
-    title: "Projekt strony",
-    text: "Przygotowuję nowoczesny projekt dopasowany do Twojej firmy i klientów.",
-  },
-  {
-    title: "Uruchomienie",
-    text: "Publikuję stronę, konfiguruję domenę i sprawdzam poprawność działania.",
-  },
-  {
-    title: "Finalizacja",
-    text: "Wprowadzamy ostatnie poprawki i przekazuję gotową stronę do działania.",
-  },
-];
+} satisfies Record<Locale, Record<string, unknown>>;
 
 const heroProject = {
   name: "LEX & Partnerzy",
@@ -65,29 +212,6 @@ const projects = [
   {
     name: "Belleza Beauty",
     image: "/realizacja-beauty.png",
-  },
-];
-
-const faqs = [
-  {
-    question: "Czy muszę znać się na domenach i hostingu?",
-    answer:
-      "Nie. Zajmuję się konfiguracją techniczną, domeną i uruchomieniem strony.",
-  },
-  {
-    question: "Czy mogę dodać Booksy, Uber Eats albo WhatsApp?",
-    answer:
-      "Tak. Strona może prowadzić klientów dokładnie tam, gdzie chcesz.",
-  },
-  {
-    question: "Czy mogę później zmienić zdjęcia lub cennik?",
-    answer:
-      "Tak. W ramach opieki mogę aktualizować treści i zdjęcia.",
-  },
-  {
-    question: "Ile trwa przygotowanie strony?",
-    answer:
-      "Przy prostym zakresie zwykle od kilku dni roboczych.",
   },
 ];
 
@@ -116,8 +240,29 @@ function SectionHeader({
 }
 
 export default function Home() {
+  const [locale, setLocale] = useState<Locale>("pl");
   const [sent, setSent] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    function syncLocale() {
+      const stored = localStorage.getItem("locale");
+      if (stored === "en" || stored === "pl") {
+        setLocale(stored);
+      }
+    }
+
+    syncLocale();
+    window.addEventListener("localechange", syncLocale);
+    window.addEventListener("storage", syncLocale);
+
+    return () => {
+      window.removeEventListener("localechange", syncLocale);
+      window.removeEventListener("storage", syncLocale);
+    };
+  }, []);
+
+  const t = content[locale];
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -129,11 +274,6 @@ export default function Home() {
     const company = String(data.get("company") || "");
     const email = String(data.get("email") || "");
     const message = String(data.get("message") || "");
-
-    const subject = encodeURIComponent("Zapytanie o stronę internetową");
-    const body = encodeURIComponent(
-      `Imię: ${name}\nFirma: ${company || "-"}\nE-mail: ${email}\n\n${message}`,
-    );
 
     await fetch("/api/contact", {
       method: "POST",
@@ -148,7 +288,7 @@ export default function Home() {
       }),
     });
 
-    alert("Wiadomość została wysłana");
+    alert(t.sentAlert as string);
     setSent(true);
   }
 
@@ -159,11 +299,11 @@ export default function Home() {
           type="button"
           className="fixed inset-0 z-[200] flex items-center justify-center bg-black/85 p-6"
           onClick={() => setSelectedImage(null)}
-          aria-label="Zamknij podgląd"
+          aria-label={t.closePreview as string}
         >
           <img
             src={selectedImage}
-            alt="Powiększony podgląd realizacji"
+            alt={t.previewAlt as string}
             className="max-h-[92vh] max-w-[92vw] rounded-3xl shadow-2xl"
           />
         </button>
@@ -178,11 +318,11 @@ export default function Home() {
           </p>
 
           <h1 className="max-w-3xl text-5xl font-black leading-[1.05] tracking-tight md:text-7xl">
-            Nowoczesne strony dla lokalnych firm
+            {t.heroTitle as string}
           </h1>
 
           <p className="mt-7 max-w-xl text-xl leading-9 text-zinc-700 dark:text-zinc-300">
-            Projekt, domena, uruchomienie i opieka w jednym miejscu.
+            {t.heroText as string}
           </p>
 
           <div className="mt-9 flex gap-4">
@@ -190,14 +330,14 @@ export default function Home() {
               href="#realizacje"
               className="rounded-xl bg-violet-600 px-7 py-4 text-center text-sm font-bold text-white shadow-lg shadow-violet-600/25 transition hover:bg-violet-500"
             >
-              Zobacz realizacje
+              {t.viewProjects as string}
             </a>
 
             <a
               href="#kontakt"
               className="rounded-xl border border-zinc-300 px-7 py-4 text-center text-sm font-bold transition hover:bg-zinc-100 dark:border-white/20 dark:hover:bg-white/10"
             >
-              Kontakt
+              {t.contact as string}
             </a>
           </div>
         </div>
@@ -217,14 +357,14 @@ export default function Home() {
 
       <section id="oferta" className="relative z-10 mx-auto max-w-7xl px-6 py-16">
         <SectionHeader
-          eyebrow="Oferta"
-          title="Co obejmuje współpraca?"
-          description="Prosta, nowoczesna strona oraz obsługa techniczna od domeny po uruchomienie."
+          eyebrow={t.offerEyebrow as string}
+          title={t.offerTitle as string}
+          description={t.offerDescription as string}
         />
 
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-white/10 dark:bg-white/[0.025] md:p-9">
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-            {services.map((service) => (
+            {(t.services as typeof content.pl.services).map((service) => (
               <div key={service.title} className="p-3">
                 <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 text-4xl text-violet-600 dark:bg-violet-600/20 dark:text-violet-400">
                   {service.icon}
@@ -241,9 +381,9 @@ export default function Home() {
 
       <section id="realizacje" className="relative z-10 mx-auto max-w-7xl px-6 py-16">
         <SectionHeader
-          eyebrow="Realizacje"
-          title="Przykładowe strony dla lokalnych firm"
-          description="Różne branże, różny klimat i jeden cel: profesjonalny wygląd oraz łatwy kontakt z klientem."
+          eyebrow={t.projectsEyebrow as string}
+          title={t.projectsTitle as string}
+          description={t.projectsDescription as string}
         />
 
         <div className="grid gap-5 md:grid-cols-3">
@@ -270,13 +410,13 @@ export default function Home() {
 
       <section id="proces" className="relative z-10 mx-auto max-w-7xl px-6 py-16">
         <SectionHeader
-          eyebrow="Proces"
-          title="Jak wygląda współpraca?"
-          description="Krótko, konkretnie i bez zbędnego technicznego zamieszania."
+          eyebrow={t.processEyebrow as string}
+          title={t.processTitle as string}
+          description={t.processDescription as string}
         />
 
         <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-5">
-          {steps.map((step, index) => (
+          {(t.steps as typeof content.pl.steps).map((step, index) => (
             <div
               key={step.title}
               className="rounded-2xl border border-zinc-200 bg-white p-8 text-center dark:border-white/10 dark:bg-white/[0.035]"
@@ -298,12 +438,12 @@ export default function Home() {
       <section id="faq" className="relative z-10 mx-auto max-w-4xl px-6 py-16">
         <SectionHeader
           eyebrow="FAQ"
-          title="Pytania i odpowiedzi"
-          description="Najczęstsze pytania przed startem współpracy."
+          title={t.faqTitle as string}
+          description={t.faqDescription as string}
         />
 
         <div className="grid gap-4">
-          {faqs.map((item) => (
+          {(t.faqs as typeof content.pl.faqs).map((item) => (
             <details
               key={item.question}
               className="group rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition open:bg-zinc-50 dark:border-white/10 dark:bg-white/[0.035] dark:open:bg-white/[0.06]"
@@ -326,76 +466,52 @@ export default function Home() {
 
       <section id="kontakt" className="relative z-10 mx-auto max-w-5xl px-6 pb-20 pt-16">
         <SectionHeader
-          eyebrow="Kontakt"
-          title="Porozmawiajmy o Twojej stronie"
-          description="Napisz kilka słów o swojej firmie i stronie, której potrzebujesz."
+          eyebrow={t.contact as string}
+          title={t.contactTitle as string}
+          description={t.contactDescription as string}
         />
 
         <div className="rounded-3xl border border-zinc-200 bg-white p-8 dark:border-white/10 dark:bg-white/[0.035] md:p-10">
           <form onSubmit={handleSubmit} className="grid gap-4">
             <div className="grid gap-4 md:grid-cols-2">
               <input
-                required
                 name="name"
-                placeholder="Imię i nazwisko"
-                className="rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-500 focus:border-violet-500 dark:border-white/10 dark:bg-black/20 dark:text-white"
+                required
+                placeholder={t.formName as string}
+                className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-4 outline-none transition focus:border-violet-500 dark:border-white/10 dark:bg-white/[0.04]"
               />
-
               <input
                 name="company"
-                placeholder="Nazwa firmy"
-                className="rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-500 focus:border-violet-500 dark:border-white/10 dark:bg-black/20 dark:text-white"
-              />
-
-              <input
-                required
-                type="email"
-                name="email"
-                placeholder="E-mail"
-                className="rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-500 focus:border-violet-500 dark:border-white/10 dark:bg-black/20 dark:text-white"
+                placeholder={t.formCompany as string}
+                className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-4 outline-none transition focus:border-violet-500 dark:border-white/10 dark:bg-white/[0.04]"
               />
             </div>
 
-            <textarea
+            <input
+              type="email"
+              name="email"
               required
+              placeholder={t.formEmail as string}
+              className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-4 outline-none transition focus:border-violet-500 dark:border-white/10 dark:bg-white/[0.04]"
+            />
+
+            <textarea
               name="message"
-              placeholder="Napisz kilka słów o swoim projekcie..."
+              required
               rows={5}
-              className="rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-500 focus:border-violet-500 dark:border-white/10 dark:bg-black/20 dark:text-white"
+              placeholder={t.formMessage as string}
+              className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-4 outline-none transition focus:border-violet-500 dark:border-white/10 dark:bg-white/[0.04]"
             />
 
             <button
               type="submit"
-              className="rounded-lg bg-violet-600 px-7 py-4 text-sm font-bold text-white shadow-lg shadow-violet-600/25 transition hover:bg-violet-500"
+              disabled={sent}
+              className="rounded-xl bg-violet-600 px-7 py-4 text-sm font-bold text-white shadow-lg shadow-violet-600/25 transition hover:bg-violet-500 disabled:opacity-60"
             >
-              Wyślij wiadomość
+              {t.formButton as string}
             </button>
-
-            {sent && (
-              <p className="text-sm text-violet-500 dark:text-violet-300">
-                Otwieram program pocztowy z gotową wiadomością.
-              </p>
-            )}
           </form>
         </div>
-        <footer className="mt-10 text-center text-xs text-zinc-400 dark:text-zinc-600">
-          <div>Jacek Smętkowski | luminso | kontakt@luminso.pl</div>
-          <div className="mt-2 flex items-center justify-center gap-4">
-            <a
-              href="/regulamin"
-              className="transition hover:text-zinc-600 dark:hover:text-zinc-400"
-            >
-              Regulamin
-            </a>
-
-            <a
-              href="/polityka-prywatnosci"
-              className="transition hover:text-zinc-600 dark:hover:text-zinc-400"
-            >
-              Polityka prywatności
-            </a>
-          </div>
-        </footer>
       </section>
     </main>
   );

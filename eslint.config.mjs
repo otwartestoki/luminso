@@ -45,6 +45,7 @@ const eslintConfig = [
       "@typescript-eslint/no-empty-object-type": "off",
       "react/no-unescaped-entities": "off",
       "no-console": "warn",
+      "@next/next/no-img-element": "off",
       "import/order": [
         "error",
         {

@@ -1,78 +1,89 @@
-# Mainline Next.js Template
+# Luminso
 
-Mainline is a free template built with shadcn/ui, Tailwind 4 and Next.js 15.
+Projekt strony Luminso oparty o Next.js, Supabase i Resend.
 
-- [Demo](https://mainline-nextjs-template.vercel.app/)
-- [Documentation](https://docs.shadcnblocks.com/templates/getting-started)
-- [Figma](https://www.figma.com/design/cFCLMj7DFv0sK7EVsqKeTa/Mainline?node-id=23250-13201&t=I1nAdchDpknii5Bd-1)
+## Uruchomienie lokalne
 
-![Mainline NextJS Template screenshot](./public/og-image.jpg)
-
-## Getting Started
+1. Zainstaluj zależności:
 
 ```bash
 npm install
 ```
 
+2. Skopiuj plik zmiennych środowiskowych:
+
+```bash
+copy .env.example .env.local
+```
+
+Na macOS/Linux:
+
+```bash
+cp .env.example .env.local
+```
+
+3. Uzupełnij `.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+RESEND_API_KEY=...
+```
+
+4. Uruchom lokalnie:
+
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Sprawdź projekt przed publikacją:
 
-## Features
+```bash
+npm run lint
+npm run build
+```
 
-### Core Technology Stack
+## Struktura folderów
 
-- **Next.js 15** with App Router
-- **Tailwind CSS 4** for styling
-- **shadcn/ui** components
-- **TypeScript** support
-- **React 19**
+```text
+src/app/                  strony aplikacji i endpoint formularza
+src/app/api/contact/      wysyłka formularza przez Resend
+src/app/blog/             lista wpisów i szczegóły wpisu z Supabase
+src/app/news/             widok newsów z Supabase
+src/components/blocks/    aktywny navbar
+src/components/ui/        komponenty UI używane przez stronę
+src/lib/                  Supabase, locale i funkcje pomocnicze
+src/styles/               style globalne
+public/                   grafiki, logo, favicony, realizacje
+fonts/                    lokalne fonty DM Sans
+```
 
-### Key Features
+## Supabase — tabela `posts`
 
-- **Shadcn UI**: uses [shadcn/ui](https://ui.shadcn.com/) core UI components
-- **Theme System**: Dark/light mode with `next-themes`, compatible with [tweakcn](https://tweakcn.com)
-- **Form Handling**: React Hook Form + Zod validation
-- **Server Actions**: Next-safe-action integration for server-side logic
-- **MDX Support**: For content pages
-- **Animations**: Motion library (Framer Motion) integration
-- **ESLint/Prettier**: Pre-configured code formatting and linting
-- **Custom Fonts**: DM Sans font family included
-- **Icons**: Lucide React + React Icons libraries
-- **Styleglide Integration**: For component previews/development
-- **Responsive Design**: Mobile-friendly layout
-- **SEO Ready**: Proper metadata and OG images included
+Strona oczekuje tabeli `posts` z polami używanymi w kodzie:
 
-### Pre-built Pages
+```text
+id, title, excerpt, content, image_url, published, created_at, site_slug, slug, language
+```
 
-- Home/Landing page
-- About page
-- Pricing page
-- FAQ page
-- Contact page with form
-- Login/Signup pages
+Wpisy są filtrowane po:
 
-### Blocks
+```text
+published = true
+site_slug = luminso
+language = pl albo en
+```
 
-- Hero section
-- Logo showcase/marquee
-- Features section
-- Resource allocation section
-- Testimonials with carousel
-- Pricing table
-- FAQ with accordion
-- Footer
-- Navigation bar
+Dzięki temu wersja PL i EN mogą mieć osobne wpisy w tej samej tabeli.
 
-## Deployment
+## Co zostało wyczyszczone
 
-Production-ready and tested for deployment on [Vercel](https://vercel.com)
-
-## Credits
-
-- Template by [shadcnblocks.com](https://shadcnblocks.com)
-- Design by [Callum Flack](https://x.com/callumflack)
-- Dev by [Yassine Zaanouni](https://x.com/YassineZaanouni)
-- Produced by [Rob Austin](https://x.com/ausrobdev)
+- usunięto `node_modules`, `.next`, `.git` i `.env.local` z paczki wynikowej,
+- usunięto pliki tymczasowe `PATCH.txt`, instrukcje robocze i duplikaty obrazów `*.jpg.jpg`,
+- usunięto nieużywane komponenty bloga oraz stary navbar,
+- poprawiono lint script,
+- dodano `.env.example`,
+- dodano podstawowe nagłówki bezpieczeństwa w `next.config.ts`,
+- poprawiono endpoint formularza kontaktowego: walidacja danych, brak inicjalizacji Resend bez API key, escapowanie HTML,
+- ujednolicono filtrowanie wpisów z Supabase po `site_slug` i `language`.
+```
